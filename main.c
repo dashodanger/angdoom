@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "h-define.h"
 #include "h-type.h"
@@ -13,7 +15,7 @@ int main(int argc, char** argv)
 
 	generate_cave();
 
-	/*
+	
 	for(y=0; y < DUNGEON_HGT; y++) {
 		for(x=0; x < DUNGEON_WID; x++) {
 			if(cave_feat[y][x] >= FEAT_WALL_EXTRA && cave_feat[y][x] <= FEAT_PERM_SOLID)
@@ -38,13 +40,12 @@ int main(int argc, char** argv)
 		printf("\n");
 	}
 
-	for(y=0; y < DUNGEON_HGT; y++) {
+	/*for(y=0; y < DUNGEON_HGT; y++) {
 		for(x=0; x < DUNGEON_WID; x++) {
 			printf("%i", cave_sector_map[y][x] % 10);
 		}
 		printf("\n");
-	}
-	*/
+	}*/	
 
 	vectorize();
 

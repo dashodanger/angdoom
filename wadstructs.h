@@ -1,20 +1,25 @@
 #ifndef __WADSTRUCTS_H_
 #define __WADSTRUCTS_H_
 
+#pragma pack(push, 1)
 typedef struct 
 {
 	char wad_type[4]; /* should be "PWAD" */
 	long num_lumps;
 	long dir_start;
-} __attribute__((packed)) Wad_Header;
+} Wad_Header;
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 typedef struct 
 {
 	long lump_start;
 	long lump_size;
 	char lump_name[8];
-} __attribute__((packed)) Lump_Entry;
+} Lump_Entry;
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 typedef struct
 {
 	short int x;
@@ -22,8 +27,10 @@ typedef struct
 	short int angle;
 	short int type;
 	short int options;
-} __attribute__((packed)) Thing;
+} Thing;
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 typedef struct
 {
 	short int from_vertex;
@@ -33,8 +40,10 @@ typedef struct
 	short int tag;
 	short int right_sidedef_idx;
 	short int left_sidedef_idx; /* -1 if no 2nd sidedef */
-} __attribute__((packed)) Linedef;
+} Linedef;
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 typedef struct
 {
 	short int x_texture_off;
@@ -43,14 +52,18 @@ typedef struct
 	char lower_texture[8];
 	char normal_texture[8];
 	short int sector;
-} __attribute__((packed)) Sidedef;
+} Sidedef;
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 typedef struct
 {
 	short int x;
 	short int y;
-} __attribute__((packed)) Vertex;
+} Vertex;
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 typedef struct
 {
 	short int floor_height;
@@ -60,6 +73,7 @@ typedef struct
 	short int brightness;
 	short int special;
 	short int tag;
-} __attribute__((packed)) Sector;
+} Sector;
+#pragma pack(pop)
 
 #endif __WADSTRUCTS_H_

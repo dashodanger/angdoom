@@ -14,6 +14,21 @@
  * (z-virt.h, z-util.h, z-form.h, term.h, random.h)
  */
 
+void vectorize();
+
+void player_place(int y, int x);
+
+void place_trap(int y, int x);
+
+void place_gold(int y, int x);
+
+void place_object(int y, int x, bool good, bool great);
+
+bool place_monster(int y, int x, bool slp, bool grp);
+
+bool alloc_monster(int dis, int slp);
+
+s16b Rand_normal(int mean, int stand);
 
 /*
  * Automatically generated "variable" declarations

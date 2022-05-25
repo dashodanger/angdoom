@@ -8,6 +8,8 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
+#include <stdlib.h>
+
 #include "z-rand.h"
 #include "h-define.h"
 #include "h-type.h"
@@ -989,7 +991,7 @@ static void build_type2(int y0, int x0)
  */
 static void build_type3(int y0, int x0)
 {
-	int y, x;
+	//int y, x;
 
 	int y1a, x1a, y2a, x2a;
 	int y1b, x1b, y2b, x2b;
@@ -1053,7 +1055,8 @@ static void build_type3(int y0, int x0)
  */
 static void build_type4(int y0, int x0)
 {
-	int y, x, y1, x1, y2, x2;
+	//int y, x, 
+	int y1, x1, y2, x2;
 
 	int light = FALSE;
 

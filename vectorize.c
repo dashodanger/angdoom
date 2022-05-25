@@ -1,11 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "h-define.h"
 #include "h-type.h"
 #include "defines.h"
 #include "externs.h"
 
-#include <ggi/ggi.h>
+//#include <ggi/ggi.h>
 
 #include "wadstructs.h"
 
@@ -25,7 +26,7 @@ Sidedef *sidedefs=NULL;
 Sector *sectors=NULL;
 int vertex_idx[DUNGEON_HGT][DUNGEON_WID];
 
-void visualize() 
+/*void visualize() 
 {
 	int x, y;
 	
@@ -70,7 +71,7 @@ void visualize()
 
 	ggiClose(vis);
 	ggiExit();
-}
+}*/
 
 void add_thing(Thing* t) 
 {
@@ -337,7 +338,7 @@ void write_wad()
 
 	printf("writing wad file\n");	
 
-	if((file=fopen("output.wad", "w"))==NULL) {
+	if((file=fopen("output.wad", "wb"))==NULL) {
 		perror("Can't write to output.wad");
 		exit(-1);
 	}
@@ -511,5 +512,5 @@ void vectorize()
 
 	write_wad();
 
-	visualize();
+	//visualize();
 }

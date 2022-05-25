@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "z-rand.h"
 #include "h-define.h"
@@ -45,7 +46,7 @@ int playerpos_x, playerpos_y;
 
 void add_thing(Thing* t);
 
-s16b player_place(int y, int x) 
+void player_place(int y, int x) 
 {
 	Thing t;
 	printf("player at %i %i\n", y, x);
@@ -174,9 +175,11 @@ bool place_monster(int y, int x, bool slp, bool grp)
 	cave_m_idx[y][x]=t.type + 1;
 
 	add_thing(&t);
+
+	return TRUE;
 }
 
-bool place_monster_aux(int y, int x, int r_idx, bool slp, bool grp) 
+void place_monster_aux(int y, int x, int r_idx, bool slp, bool grp) 
 {
 	printf("monster type %i at %i %i\n", r_idx, y, x);
 }
