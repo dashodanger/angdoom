@@ -14,7 +14,6 @@ int main(int argc, char** argv)
 	srand(time(NULL));
 
 	generate_cave();
-
 	
 	for(y=0; y < DUNGEON_HGT; y++) {
 		for(x=0; x < DUNGEON_WID; x++) {

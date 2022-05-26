@@ -6,8 +6,6 @@
 #include "defines.h"
 #include "externs.h"
 
-//#include <ggi/ggi.h>
-
 #include "wadstructs.h"
 
 int cave_sector_map[DUNGEON_HGT][DUNGEON_WID];
@@ -25,53 +23,6 @@ Linedef *linedefs=NULL;
 Sidedef *sidedefs=NULL;
 Sector *sectors=NULL;
 int vertex_idx[DUNGEON_HGT][DUNGEON_WID];
-
-/*void visualize() 
-{
-	int x, y;
-	
-	ggi_visual_t vis;
-	ggi_color color;
-	ggi_pixel pix;
-	
-	ggiInit();
-	vis=ggiOpen(NULL);
-
-	ggiSetGraphMode(vis, 640, 480, 640, 480, GT_AUTO);
-
-	color.r=0xFFFF;
-	color.g=0xFFFF;
-	color.b=0xFFFF;
-
-	pix=ggiMapColor(vis, &color);
-	ggiSetGCForeground(vis, pix);
-
-
-	// ROCK1 for walls
-	// RROCK13 for floor/ceiling
-	// 1 tile = 64 units square
-	// tunnel hight should be 64 units
-	// light level 64 is nice and dark...
-
-	for(y=0; y < DUNGEON_HGT - 1 ; y++) {
-		for(x=0; x < DUNGEON_WID - 1; x++) {
-			if(cave_sector_map[y][x] != cave_sector_map[y][x+1]) {
-				ggiDrawVLine(vis, x*3 + 3, y*3, 3);
-			}
-
-			if(cave_sector_map[y][x] != cave_sector_map[y+1][x]) {
-				ggiDrawHLine(vis, x*3, y*3 + 3, 3);				
-			}			
-		}
-	}
-
-	ggiFlush(vis);
-
-	ggiGetc(vis);
-
-	ggiClose(vis);
-	ggiExit();
-}*/
 
 void add_thing(Thing* t) 
 {
@@ -456,8 +407,17 @@ void vectorize()
 				do_linedef(y, x, y+1, x, 1);
 			}
 
+			// Make traps into obvious lava for now
 			if(cave_feat[y][x]==FEAT_TRAP_HEAD) {
+				sectors[cave_sector_map[y][x]].brightness = 120;
+				memset(sectors[cave_sector_map[y][x]].floor_texture, 0, 8);
+				memcpy(sectors[cave_sector_map[y][x]].floor_texture, "LAVA1", 5);
 				sectors[cave_sector_map[y][x]].special += 0x10;
+			}
+
+			// Mark hidden door sector as secret
+			if(cave_feat[y][x]==FEAT_SECRET) {
+				sectors[cave_sector_map[y][x]].special += 0x09;
 			}
 		}		
 	}
@@ -511,6 +471,4 @@ void vectorize()
 	*/
 
 	write_wad();
-
-	//visualize();
 }
