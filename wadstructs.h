@@ -76,4 +76,4 @@ typedef struct
 } Sector;
 #pragma pack(pop)
 
-#endif WADSTRUCTS_H
+#endif // WADSTRUCTS_H
