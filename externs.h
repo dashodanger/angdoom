@@ -1,10 +1,5 @@
 /* File: externs.h */
 
-/*
- * Note that some files have their own header files
- * (z-virt.h, z-util.h, z-form.h, term.h, random.h)
- */
-
 void vectorize();
 
 void player_place(int y, int x);

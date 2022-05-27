@@ -30,6 +30,11 @@ void add_thing(Thing* t)
 	memcpy(&things[thing_counter-1], t, sizeof(Thing));
 }
 
+int is_exit(int feat)
+{
+	return feat == FEAT_MORE;
+}
+
 int is_floor(int feat)
 {
 	return (feat == FEAT_FLOOR 
@@ -89,6 +94,16 @@ void do_linedef(int y, int x, int ye, int xe, int direction)
 				linedefs[linedef_counter].to_vertex=vertex_idx[y+1][x+1];
 			}
 			sidedefs[sidedef_counter].sector=cave_sector_map[ye][xe];
+			if (is_exit(cave_feat[ye][xe])) {
+				linedefs[linedef_counter].type=11;
+				sidedefs[sidedef_counter].y_texture_off=50;
+				memset(sidedefs[sidedef_counter].upper_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].lower_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].normal_texture, 0, 8);
+				memcpy(sidedefs[sidedef_counter].upper_texture, "SW1ROCK", 7);
+				memcpy(sidedefs[sidedef_counter].lower_texture, "SW1ROCK", 7);
+				memcpy(sidedefs[sidedef_counter].normal_texture, "SW1ROCK", 7);
+			}
 		}
 
 		/* floor left/top, wall right/bottom */
@@ -101,6 +116,16 @@ void do_linedef(int y, int x, int ye, int xe, int direction)
 				linedefs[linedef_counter].from_vertex=vertex_idx[y+1][x+1];
 			}
 			sidedefs[sidedef_counter].sector=cave_sector_map[y][x];
+			if (is_exit(cave_feat[ye][xe])) {
+				linedefs[linedef_counter].type=11;
+				sidedefs[sidedef_counter].y_texture_off=50;
+				memset(sidedefs[sidedef_counter].upper_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].lower_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].normal_texture, 0, 8);
+				memcpy(sidedefs[sidedef_counter].upper_texture, "SW1ROCK", 7);
+				memcpy(sidedefs[sidedef_counter].lower_texture, "SW1ROCK", 7);
+				memcpy(sidedefs[sidedef_counter].normal_texture, "SW1ROCK", 7);
+			}
 		}
 
 		return;
