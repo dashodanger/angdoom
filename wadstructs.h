@@ -1,5 +1,5 @@
-#ifndef __WADSTRUCTS_H_
-#define __WADSTRUCTS_H_
+#ifndef _WADSTRUCTS_H_
+#define _WADSTRUCTS_H_
 
 #pragma pack(push, 1)
 typedef struct 
@@ -76,4 +76,4 @@ typedef struct
 } Sector;
 #pragma pack(pop)
 
-#endif __WADSTRUCTS_H_
+#endif _WADSTRUCTS_H_
