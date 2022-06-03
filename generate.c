@@ -343,19 +343,6 @@ static int next_to_walls(int y, int x)
 	return (k);
 }
 
-
-
-/*
- * Convert existing terrain type to rubble
- */
-static void place_rubble(int y, int x)
-{
-	/* Create rubble */
-	/* cave_set_feat(y, x, FEAT_RUBBLE); don't do that */ 
-}
-
-
-
 /*
  * Convert existing terrain type to "up stairs"
  */
@@ -1896,11 +1883,11 @@ static void cave_gen(void)
 	}
 
 
-	/* Place some traps in the dungeon */
-	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint(k));
+	/* Place some traps in the dungeon */ // AngDoom - require trap to be in corridor
+	alloc_object(ALLOC_SET_CORR, ALLOC_TYP_TRAP, randint(k));
 
-	/* Put some rubble in corridors */
-	alloc_object(ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint(k));
+	/* Put some rubble in corridors */ // AngDoom - use this for gore/decorations/etc
+	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_RUBBLE, randint(k));
 
 	/* Put some objects in rooms */
 	alloc_object(ALLOC_SET_ROOM, ALLOC_TYP_OBJECT, Rand_normal(DUN_AMT_ROOM, 3));

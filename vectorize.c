@@ -9,6 +9,8 @@
 
 #include "wadstructs.h"
 
+#include "z-rand.h"
+
 int cave_sector_map[DUNGEON_HGT][DUNGEON_WID];
 
 int sector_counter=-1; /* preallocated */
@@ -25,6 +27,8 @@ Sidedef *sidedefs=NULL;
 Sector *sectors=NULL;
 int vertex_idx[DUNGEON_HGT][DUNGEON_WID];
 
+static const int crusher_types[3] = { 6, 25, 141 };
+
 void add_thing(Thing* t) 
 {
 	things=(Thing*)realloc(things, ++thing_counter * sizeof(Thing));
@@ -34,6 +38,11 @@ void add_thing(Thing* t)
 int is_exit(int feat)
 {
 	return feat == FEAT_MORE;
+}
+
+int is_trap(int feat)
+{
+	return feat == FEAT_TRAP_HEAD;
 }
 
 int is_floor(int feat)
@@ -105,6 +114,14 @@ void do_linedef(int y, int x, int ye, int xe, int direction)
 				memcpy(sidedefs[sidedef_counter].lower_texture, "SW1ROCK", 7);
 				memcpy(sidedefs[sidedef_counter].normal_texture, "SW1ROCK", 7);
 			}
+			if(is_trap(cave_feat[ye][xe]) || is_trap(cave_feat[y][x])) {
+				memset(sidedefs[sidedef_counter].upper_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].lower_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].normal_texture, 0, 8);
+				memcpy(sidedefs[sidedef_counter].upper_texture, "ROCK2", 5);
+				memcpy(sidedefs[sidedef_counter].lower_texture, "ROCK2", 5);
+				memcpy(sidedefs[sidedef_counter].normal_texture, "ROCK2", 5);
+			}
 		}
 
 		/* floor left/top, wall right/bottom */
@@ -126,6 +143,14 @@ void do_linedef(int y, int x, int ye, int xe, int direction)
 				memcpy(sidedefs[sidedef_counter].upper_texture, "SW1ROCK", 7);
 				memcpy(sidedefs[sidedef_counter].lower_texture, "SW1ROCK", 7);
 				memcpy(sidedefs[sidedef_counter].normal_texture, "SW1ROCK", 7);
+			}
+			if(is_trap(cave_feat[ye][xe]) || is_trap(cave_feat[y][x])) {
+				memset(sidedefs[sidedef_counter].upper_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].lower_texture, 0, 8);
+				memset(sidedefs[sidedef_counter].normal_texture, 0, 8);
+				memcpy(sidedefs[sidedef_counter].upper_texture, "ROCK2", 5);
+				memcpy(sidedefs[sidedef_counter].lower_texture, "ROCK2", 5);
+				memcpy(sidedefs[sidedef_counter].normal_texture, "ROCK2", 5);
 			}
 		}
 
@@ -218,6 +243,12 @@ void do_linedef(int y, int x, int ye, int xe, int direction)
 	if(is_floor_ish(cave_feat[y][x])
 	   && is_floor_ish(cave_feat[ye][xe])) {
 
+		int trap_type = 0;
+		if(is_trap(cave_feat[ye][xe]) || is_trap(cave_feat[y][x]))
+		{
+			trap_type = crusher_types[rand_int(3)];
+		}		
+
 		if(vertex_idx[ye][xe]==-1) vertex_idx[ye][xe]=vertex_counter++;
 		if(vertex_idx[y+1][x+1]==-1) vertex_idx[y+1][x+1]=vertex_counter++;
 
@@ -228,15 +259,38 @@ void do_linedef(int y, int x, int ye, int xe, int direction)
 		linedefs[linedef_counter].type=0;
 		linedefs[linedef_counter].tag=0;
 		linedefs[linedef_counter].right_sidedef_idx=++sidedef_counter;
-					
+
+		if(is_trap(cave_feat[ye][xe]))
+		{
+			if(sectors[cave_sector_map[ye][xe]].tag == -1) sectors[cave_sector_map[ye][xe]].tag=tag_counter++;
+			linedefs[linedef_counter].tag = sectors[cave_sector_map[ye][xe]].tag;
+			linedefs[linedef_counter].type=trap_type;
+		}
+
+		if(is_trap(cave_feat[y][x]))
+		{
+			if(sectors[cave_sector_map[y][x]].tag == -1) sectors[cave_sector_map[y][x]].tag=tag_counter++;
+			linedefs[linedef_counter].tag = sectors[cave_sector_map[y][x]].tag;
+			linedefs[linedef_counter].type=trap_type;
+		}
+
 		sidedefs[sidedef_counter].x_texture_off=0;
 		sidedefs[sidedef_counter].y_texture_off=0;
 		memset(sidedefs[sidedef_counter].upper_texture, 0, 8);
 		memset(sidedefs[sidedef_counter].lower_texture, 0, 8);
 		memset(sidedefs[sidedef_counter].normal_texture, 0, 8);
-		memcpy(sidedefs[sidedef_counter].upper_texture, "-", 1);
-		memcpy(sidedefs[sidedef_counter].lower_texture, "-", 1);
-		memcpy(sidedefs[sidedef_counter].normal_texture, "-", 1);
+		if(is_trap(cave_feat[ye][xe]) || is_trap(cave_feat[y][x]))
+		{
+			memcpy(sidedefs[sidedef_counter].upper_texture, "ROCK2", 5);
+			memcpy(sidedefs[sidedef_counter].lower_texture, "-", 1);
+			memcpy(sidedefs[sidedef_counter].normal_texture, "-", 1);
+		}
+		else
+		{
+			memcpy(sidedefs[sidedef_counter].upper_texture, "-", 1);
+			memcpy(sidedefs[sidedef_counter].lower_texture, "-", 1);
+			memcpy(sidedefs[sidedef_counter].normal_texture, "-", 1);
+		}
 		sidedefs[sidedef_counter].sector=cave_sector_map[ye][xe];
 
 		linedefs[linedef_counter].left_sidedef_idx=++sidedef_counter;
@@ -246,9 +300,18 @@ void do_linedef(int y, int x, int ye, int xe, int direction)
 		memset(sidedefs[sidedef_counter].upper_texture, 0, 8);
 		memset(sidedefs[sidedef_counter].lower_texture, 0, 8);
 		memset(sidedefs[sidedef_counter].normal_texture, 0, 8);
-		memcpy(sidedefs[sidedef_counter].upper_texture, "-", 1);
-		memcpy(sidedefs[sidedef_counter].lower_texture, "-", 1);
-		memcpy(sidedefs[sidedef_counter].normal_texture, "-", 1);
+		if(is_trap(cave_feat[ye][xe]) || is_trap(cave_feat[y][x]))
+		{
+			memcpy(sidedefs[sidedef_counter].upper_texture, "ROCK2", 5);
+			memcpy(sidedefs[sidedef_counter].lower_texture, "-", 1);
+			memcpy(sidedefs[sidedef_counter].normal_texture, "-", 1);
+		}
+		else
+		{
+			memcpy(sidedefs[sidedef_counter].upper_texture, "-", 1);
+			memcpy(sidedefs[sidedef_counter].lower_texture, "-", 1);
+			memcpy(sidedefs[sidedef_counter].normal_texture, "-", 1);
+		}
 		sidedefs[sidedef_counter].sector=cave_sector_map[y][x];
 
 		return;
@@ -433,12 +496,12 @@ void vectorize()
 				do_linedef(y, x, y+1, x, 1);
 			}
 
-			// Make traps into obvious lava for now
-			if(cave_feat[y][x]==FEAT_TRAP_HEAD) {
-				sectors[cave_sector_map[y][x]].brightness = 120;
+			// Give traps a subtly different floor/ceiling
+			if(is_trap(cave_feat[y][x])) {
 				memset(sectors[cave_sector_map[y][x]].floor_texture, 0, 8);
-				memcpy(sectors[cave_sector_map[y][x]].floor_texture, "LAVA1", 5);
-				sectors[cave_sector_map[y][x]].special += 0x10;
+				memcpy(sectors[cave_sector_map[y][x]].floor_texture, "GRNROCK", 7);
+				memset(sectors[cave_sector_map[y][x]].ceiling_texture, 0, 8);
+				memcpy(sectors[cave_sector_map[y][x]].ceiling_texture, "GRNROCK", 7);
 			}
 
 			// Mark hidden door sector as secret
