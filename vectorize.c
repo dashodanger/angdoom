@@ -40,6 +40,11 @@ int is_exit(int feat)
 	return feat == FEAT_MORE;
 }
 
+int is_magma(int feat)
+{
+	return (feat == FEAT_MAGMA || feat == FEAT_MAGMA_H || feat == FEAT_MAGMA_K);
+}
+
 int is_trap(int feat)
 {
 	return feat == FEAT_TRAP_HEAD;
@@ -56,6 +61,9 @@ int is_floor(int feat)
 int is_floor_ish(int feat)
 {
 	return (feat == FEAT_FLOOR 
+			|| feat == FEAT_MAGMA
+			|| feat == FEAT_MAGMA_H
+			|| feat == FEAT_MAGMA_K
 			|| feat == FEAT_DOOR_HEAD
 			|| feat == FEAT_SECRET
 			|| feat == FEAT_LESS
@@ -502,6 +510,14 @@ void vectorize()
 				memcpy(sectors[cave_sector_map[y][x]].floor_texture, "GRNROCK", 7);
 				memset(sectors[cave_sector_map[y][x]].ceiling_texture, 0, 8);
 				memcpy(sectors[cave_sector_map[y][x]].ceiling_texture, "GRNROCK", 7);
+			}
+
+			// Magma streamer floors are damaging lava, which seems sensible
+			if(is_magma(cave_feat[y][x])) {
+				sectors[cave_sector_map[y][x]].brightness = 120;
+				sectors[cave_sector_map[y][x]].special += 0x10;
+				memset(sectors[cave_sector_map[y][x]].floor_texture, 0, 8);
+				memcpy(sectors[cave_sector_map[y][x]].floor_texture, "LAVA1", 5);
 			}
 
 			// Mark hidden door sector as secret

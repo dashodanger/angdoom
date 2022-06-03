@@ -116,7 +116,7 @@
 /*
  * Dungeon streamer generation values
  */
-#define DUN_STR_DEN	5	/* Density of streamers */
+#define DUN_STR_DEN	2	/* Density of streamers */
 #define DUN_STR_RNG	2	/* Width of streamers */
 #define DUN_STR_MAG	3	/* Number of magma streamers */
 #define DUN_STR_MC	90	/* 1/chance of treasure per magma */
@@ -568,14 +568,15 @@ static void build_streamer(int feat, int chance)
 			}
 
 			/* Only convert "granite" walls */
-			if (cave_feat[ty][tx] < FEAT_WALL_EXTRA) continue;
-			if (cave_feat[ty][tx] > FEAT_WALL_SOLID) continue;
+			//if (cave_feat[ty][tx] < FEAT_WALL_EXTRA) continue;
+			//if (cave_feat[ty][tx] > FEAT_WALL_SOLID) continue;
+			if (cave_feat[ty][tx] != FEAT_FLOOR) continue;
 
 			/* Clear previous contents, add proper vein type */
 			cave_set_feat(ty, tx, feat);
 
 			/* Hack -- Add some (known) treasure */
-			if (rand_int(chance) == 0) cave_feat[ty][tx] += 0x04;
+			//if (rand_int(chance) == 0) cave_feat[ty][tx] += 0x04;
 		}
 
 		/* Advance the streamer */
@@ -1841,12 +1842,12 @@ static void cave_gen(void)
 
 
 	/* Hack -- Add some magma streamers */
-	/*
+	
 	for (i = 0; i < DUN_STR_MAG; i++)
 	{
 		build_streamer(FEAT_MAGMA, DUN_STR_MC);
 	}
-	*/
+	
 
 	/* Hack -- Add some quartz streamers */
 	/*
