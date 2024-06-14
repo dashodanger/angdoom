@@ -102,30 +102,6 @@ void place_trap(int y, int x)
 #define COMPUTER_MAP    0x07ea
 #define LIGHT_AMP       0x07fd
 
-#define BLOODY_MESS		0xA
-#define DEAD_PLAYER		0xF
-#define BLOOD_POOL		0x50
-#define BLOOD_POOL_2	0x18
-#define BLOOD_POOL_3	0x4F
-#define BLOOD_POOL_4	0x51
-
-void place_rubble(int y, int x) 
-{
-	Thing t;
-
-	short int rubble_items[6] = {BLOODY_MESS, DEAD_PLAYER, BLOOD_POOL, BLOOD_POOL_2, BLOOD_POOL_3, BLOOD_POOL_4};
-
-	t.x = x * 64 + 32;
-	t.y = y * 64 + 32;
-	t.angle = rand_int(360);
-	t.type = rubble_items[rand_int(6)];
-
-	printf("object of type %i at (%i, %i)\n", t.type, x, y);
-
-	t.options = 0x7;
-
-	add_thing(&t);
-}
 
 void place_object(int y, int x, bool good, bool great) 
 {
