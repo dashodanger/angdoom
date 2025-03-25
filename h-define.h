@@ -1,7 +1,6 @@
 /* File: h-define.h */
 
-#ifndef INCLUDED_H_DEFINE_H
-#define INCLUDED_H_DEFINE_H
+#pragma once
 
 /*
  * Define some simple constants
@@ -127,8 +126,3 @@
 #  define KTRL(X)	((X) & 0x1F)
 #  define ESCAPE	'\033'
 #endif
-
-
-#endif
-
-

@@ -12,35 +12,35 @@
 /*
  * Global array for looping through the "keypad directions"
  */
-s16b ddd[9] =
+int16_t ddd[9] =
 { 2, 8, 6, 4, 3, 1, 9, 7, 5 };
 
 /*
  * Global arrays for converting "keypad direction" into offsets
  */
-s16b ddx[10] =
+int16_t ddx[10] =
 { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
 
-s16b ddy[10] =
+int16_t ddy[10] =
 { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 };
 
 /*
  * Global arrays for optimizing "ddx[ddd[i]]" and "ddy[ddd[i]]"
  */
-s16b ddx_ddd[9] =
+int16_t ddx_ddd[9] =
 { 0, 0, 1, -1, 1, -1, 1, -1, 0 };
 
-s16b ddy_ddd[9] =
+int16_t ddy_ddd[9] =
 { 1, -1, 0, 0, 1, 1, -1, -1, 0 };
 
 
-s16b cave_o_idx[DUNGEON_HGT][DUNGEON_WID];
-byte cave_info[DUNGEON_HGT][256];
-byte cave_feat[DUNGEON_HGT][DUNGEON_WID];
-s16b cave_m_idx[DUNGEON_HGT][DUNGEON_WID];
+int16_t cave_o_idx[DUNGEON_HGT][DUNGEON_WID];
+uint8_t cave_info[DUNGEON_HGT][256];
+uint8_t cave_feat[DUNGEON_HGT][DUNGEON_WID];
+int16_t cave_m_idx[DUNGEON_HGT][DUNGEON_WID];
 
-s16b feeling;			/* Most recent feeling */
-s16b rating;			/* Level's current rating */
+int16_t feeling;			/* Most recent feeling */
+int16_t rating;			/* Level's current rating */
 
 int playerpos_x, playerpos_y;
 
@@ -107,7 +107,7 @@ void place_object(int y, int x, bool good, bool great)
 {
 	Thing t;
 
-	short int fun_items[13] = {CHAINSAW, SHOTGUN, DBL_SHOTGUN, CHAINGUN, ROCKET_LAUNCHER,
+	int16_t fun_items[13] = {CHAINSAW, SHOTGUN, DBL_SHOTGUN, CHAINGUN, ROCKET_LAUNCHER,
 							   AMMO_BOX, SHELLS_BOX, ROCKETS_BOX, BACKPACK, MEDIKIT,
 							   GREEN_ARMOR, BLUE_ARMOR, STIMPACK};
 
@@ -214,7 +214,7 @@ void cave_set_feat(int y, int x, int feat)
  *
  * Algorithm: hypot(dy,dx) = max(dy,dx) + min(dy,dx) / 2
  */
-sint distance(int y1, int x1, int y2, int x2)
+int32_t distance(int y1, int x1, int y2, int x2)
 {
 	int ay, ax;
 
@@ -522,7 +522,7 @@ bool los(int y1, int x1, int y2, int x2)
 }
 
 
-s16b get_mon_num(int level) 
+int16_t get_mon_num(int level) 
 {
 	return rand_int(10);
 }
@@ -573,7 +573,7 @@ bool alloc_monster(int dis, int slp)
 /*
  * The normal distribution table for the "Rand_normal()" function (below)
  */
-static s16b Rand_normal_table[RANDNOR_NUM] =
+static int16_t Rand_normal_table[RANDNOR_NUM] =
 {
 	206,     613,    1022,    1430,		1838,	 2245,	  2652,	   3058,
 	3463,    3867,    4271,    4673,	5075,	 5475,	  5874,	   6271,
@@ -633,13 +633,13 @@ static s16b Rand_normal_table[RANDNOR_NUM] =
  *
  * Note that the binary search takes up to 16 quick iterations.
  */
-s16b Rand_normal(int mean, int stand)
+int16_t Rand_normal(int mean, int stand)
 {
-	s16b tmp;
-	s16b offset;
+	int16_t tmp;
+	int16_t offset;
 
-	s16b low = 0;
-	s16b high = RANDNOR_NUM;
+	int16_t low = 0;
+	int16_t high = RANDNOR_NUM;
 
 	/* Paranoia */
 	if (stand < 1) return (mean);

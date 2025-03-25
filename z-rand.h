@@ -1,7 +1,6 @@
 /* File: z-rand.h */
 
-#ifndef INCLUDED_Z_RAND_H
-#define INCLUDED_Z_RAND_H
+#pragma once
 
 #include "h-type.h"
 
@@ -28,7 +27,7 @@
  * For example, if M is 100, you get "percentile dice"
  */
 #define rand_int(M) \
-	((s32b)(rand()%(M)))
+	((int32_t)(rand()%(M)))
 
 /*
  * Generates a random long integer X where A<=X<=B
@@ -45,8 +44,3 @@
  */
 #define rand_spread(A,D) \
 	((A) + (rand_int(1+(D)+(D))) - (D))
-
-
-#endif
-
-

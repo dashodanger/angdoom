@@ -179,8 +179,8 @@ typedef struct coord coord;
 
 struct coord
 {
-	byte y;
-	byte x;
+	uint8_t y;
+	uint8_t x;
 };
 
 
@@ -193,10 +193,10 @@ typedef struct room_data room_data;
 struct room_data
 {
 	/* Required size in blocks */
-	s16b dy1, dy2, dx1, dx2;
+	int16_t dy1, dy2, dx1, dx2;
 
 	/* Hack -- minimum level */
-	s16b level;
+	int16_t level;
 };
 
 
@@ -1929,7 +1929,7 @@ void generate_cave(void)
 	{
 		bool okay = TRUE;
 
-		cptr why = NULL;
+		const char * why = NULL;
 
 
 		/* Start with a blank cave */
