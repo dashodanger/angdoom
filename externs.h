@@ -146,12 +146,10 @@ extern int32_t temp_n;
 extern uint16_t *temp_g;
 extern uint8_t *temp_y;
 extern uint8_t *temp_x;
-extern uint8_t cave_info[DUNGEON_HGT][256];
+extern uint8_t cave_info[DUNGEON_HGT][DUNGEON_WID];
 extern uint8_t cave_feat[DUNGEON_HGT][DUNGEON_WID];
 extern int16_t cave_o_idx[DUNGEON_HGT][DUNGEON_WID];
 extern int16_t cave_m_idx[DUNGEON_HGT][DUNGEON_WID];
-extern int cave_sector_map[DUNGEON_HGT][DUNGEON_WID];
-extern int sector_counter;
 
 extern int16_t alloc_kind_size;
 extern int16_t alloc_race_size;

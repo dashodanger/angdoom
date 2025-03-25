@@ -1,14 +1,13 @@
-# Same version line copied from Obsidian...if needs be I'm sure this can be adjusted quite a bit downward
 cmake_minimum_required(VERSION 3.12..3.20)
 
 project(
-  angdoom
+  angwolf
   LANGUAGES C
   VERSION 0.1.0
 )
 
 add_executable(
-  angdoom
+  angwolf
   main.c 
   generate.c
   misc.c
@@ -17,8 +16,8 @@ add_executable(
 
 # Copies executable to local install directory after build
 add_custom_command(
-  TARGET angdoom
+  TARGET angwolf
   POST_BUILD
-  COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:angdoom>"
+  COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:angwolf>"
           "${CMAKE_CURRENT_LIST_DIR}"
 )

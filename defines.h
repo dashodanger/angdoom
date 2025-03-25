@@ -53,39 +53,39 @@
  * Number of grids in each block (vertically)
  * Probably hard-coded to 11, see "generate.c"
  */
-#define BLOCK_HGT	11
+#define BLOCK_HGT	8
 
 /*
  * Number of grids in each block (horizontally)
  * Probably hard-coded to 11, see "generate.c"
  */
-#define BLOCK_WID	11
+#define BLOCK_WID	8
 
 
 /*
  * Number of grids in each panel (vertically)
  * Must be a multiple of BLOCK_HGT
  */
-#define PANEL_HGT	11
+#define PANEL_HGT	16
 
 /*
  * Number of grids in each panel (horizontally)
  * Must be a multiple of BLOCK_WID
  */
-#define PANEL_WID	33
+#define PANEL_WID	16
 
 
 /*
  * Number of grids in each screen (vertically)
  * Must be a multiple of PANEL_HGT (at least 2x)
  */
-#define SCREEN_HGT	22
+#define SCREEN_HGT	32
 
 /*
  * Number of grids in each screen (horizontally)
  * Must be a multiple of PANEL_WID (at least 2x)
  */
-#define SCREEN_WID	66
+#define SCREEN_WID	32
 
 
 /*
@@ -93,14 +93,14 @@
  * Must be a multiple of SCREEN_HGT
  * Must be less or equal to 256
  */
-#define DUNGEON_HGT		132
+#define DUNGEON_HGT		64
 
 /*
  * Number of grids in each dungeon (vertically)
  * Must be a multiple of SCREEN_WID
  * Must be less or equal to 256
  */
-#define DUNGEON_WID		198
+#define DUNGEON_WID		64
 
 
 /*

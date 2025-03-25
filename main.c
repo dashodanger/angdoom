@@ -38,14 +38,7 @@ int main(int argc, char** argv)
 		}
 		printf("\n");
 	}
-
-	/*for(y=0; y < DUNGEON_HGT; y++) {
-		for(x=0; x < DUNGEON_WID; x++) {
-			printf("%i", cave_sector_map[y][x] % 10);
-		}
-		printf("\n");
-	}*/	
-
+	
 	vectorize();
 
 	return 0;

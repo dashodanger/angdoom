@@ -1,4 +1,5 @@
 build/
 
-angdoom.exe
-output.wad
+angwolf.exe
+angwolf
+*.WL6

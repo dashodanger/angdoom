@@ -169,7 +169,7 @@
  */
 #define ROOM_MAX	5
 
-
+int sector_counter = 0;
 
 /*
  * Simple structure to hold a map location
@@ -406,7 +406,6 @@ static void place_secret_door(int y, int x, int sector)
 {
 	/* Create secret door */
 	cave_set_feat(y, x, FEAT_SECRET);
-	cave_sector_map[y][x]=sector;
 }
 
 
@@ -425,8 +424,6 @@ static void place_random_door(int y, int x)
 	} else {
 		cave_set_feat(y, x, FEAT_DOOR_HEAD);
 	}
-
-	cave_sector_map[y][x]=++sector_counter;
 }
 
 
@@ -720,7 +717,6 @@ static void generate_fill(int y1, int x1, int y2, int x2, int feat, int sector)
 		for (x = x1; x <= x2; x++)
 		{
 			cave_set_feat(y, x, feat);
-			cave_sector_map[y][x]=sector;
 		}
 	}
 }
@@ -737,16 +733,12 @@ static void generate_draw(int y1, int x1, int y2, int x2, int feat, int sector)
 	{
 		cave_set_feat(y, x1, feat);
 		cave_set_feat(y, x2, feat);
-		cave_sector_map[y][x1]=sector;
-		cave_sector_map[y][x2]=sector;
 	}
 
 	for (x = x1; x <= x2; x++)
 	{
 		cave_set_feat(y1, x, feat);
 		cave_set_feat(y2, x, feat);
-		cave_sector_map[y1][x]=sector;
-		cave_sector_map[y2][x]=sector;
 	}
 }
 
@@ -766,13 +758,11 @@ static void generate_plus(int y1, int x1, int y2, int x2, int feat, int sector)
 	for (y = y1; y <= y2; y++)
 	{
 		cave_set_feat(y, x0, feat);
-		cave_sector_map[y][x0]=sector;
 	}
 
 	for (x = x1; x <= x2; x++)
 	{
 		cave_set_feat(y0, x, feat);
-		cave_sector_map[y0][x]=sector;
 	}
 }
 
@@ -793,25 +783,21 @@ static void generate_hole(int y1, int x1, int y2, int x2, int feat, int sector)
 		case 0:
 		{
 			cave_set_feat(y1, x0, feat);
-			cave_sector_map[y1][x0]=sector;
 			break;
 		}
 		case 1:
 		{
 			cave_set_feat(y0, x1, feat);
-			cave_sector_map[y0][x1]=sector;
 			break;
 		}
 		case 2:
 		{
 			cave_set_feat(y2, x0, feat);
-			cave_sector_map[y2][x0]=sector;
 			break;
 		}
 		case 3:
 		{
 			cave_set_feat(y0, x2, feat);
-			cave_sector_map[y0][x2]=sector;
 			break;
 		}
 	}
@@ -898,7 +884,6 @@ static void build_type1(int y0, int x0)
 			for (x = x1; x <= x2; x += 2)
 			{
 				cave_set_feat(y, x, FEAT_WALL_INNER);
-				cave_sector_map[y][x]=0;
 			}
 		}
 	}
@@ -910,16 +895,12 @@ static void build_type1(int y0, int x0)
 		{
 			cave_set_feat(y, x1, FEAT_WALL_INNER);
 			cave_set_feat(y, x2, FEAT_WALL_INNER);
-			cave_sector_map[y][x1]=0;
-			cave_sector_map[y][x2]=0;
 		}
 
 		for (x = x1 + 2; x <= x2 - 2; x += 2)
 		{
 			cave_set_feat(y1, x, FEAT_WALL_INNER);
 			cave_set_feat(y2, x, FEAT_WALL_INNER);
-			cave_sector_map[y1][x]=0;
-			cave_sector_map[y2][x]=0;
 		}
 	}
 }
@@ -1112,7 +1093,6 @@ static void build_type4(int y0, int x0)
 
 			/* Place another inner room */
 			generate_draw(y0-1, x0-1, y0+1, x0+1, FEAT_WALL_INNER, 0);
-			cave_sector_map[y0][x0]=++sector_counter;
 
 			/* Open the inner room with a locked door */
 			generate_hole(y0-1, x0-1, y0+1, x0+1, FEAT_DOOR_HEAD, ++sector_counter);
@@ -1181,9 +1161,6 @@ static void build_type4(int y0, int x0)
 				/* Inner rectangle */
 				generate_draw(y0-1, x0-5, y0+1, x0+5, FEAT_WALL_INNER, 0);
 				
-				cave_sector_map[y0][x0-3]=++sector_counter;
-				cave_sector_map[y0][x0+3]=++sector_counter;
-
 				/* Secret doors (random top/bottom) */
 				place_secret_door(y0 - 3 + (randint(2) * 2), x0 - 3, ++sector_counter);
 				place_secret_door(y0 - 3 + (randint(2) * 2), x0 + 3, ++sector_counter);
@@ -1472,7 +1449,6 @@ static void build_tunnel(int row1, int col1, int row2, int col2)
 
 		/* Clear previous contents, add a floor */
 		cave_set_feat(y, x, FEAT_FLOOR);
-		cave_sector_map[y][x]=tunnel_sector;
 	}
 
 
@@ -1485,7 +1461,6 @@ static void build_tunnel(int row1, int col1, int row2, int col2)
 
 		/* Convert to floor grid */
 		cave_set_feat(y, x, FEAT_FLOOR);
-		cave_sector_map[y][x]=tunnel_sector;
 
 		/* Occasional doorway */
 		if (rand_int(100) < DUN_TUN_PEN)
@@ -1773,7 +1748,6 @@ static void cave_gen(void)
 
 		/* Clear previous contents, add "solid" perma-wall */
 		cave_set_feat(y, x, FEAT_PERM_SOLID);
-		cave_sector_map[y][x]=0;
 	}
 
 	/* Special boundary walls -- Bottom */
@@ -1783,7 +1757,6 @@ static void cave_gen(void)
 
 		/* Clear previous contents, add "solid" perma-wall */
 		cave_set_feat(y, x, FEAT_PERM_SOLID);
-		cave_sector_map[y][x]=0;
 	}
 
 	/* Special boundary walls -- Left */
@@ -1793,7 +1766,6 @@ static void cave_gen(void)
 
 		/* Clear previous contents, add "solid" perma-wall */
 		cave_set_feat(y, x, FEAT_PERM_SOLID);
-		cave_sector_map[y][x]=0;
 	}
 
 	/* Special boundary walls -- Right */
@@ -1803,7 +1775,6 @@ static void cave_gen(void)
 
 		/* Clear previous contents, add "solid" perma-wall */
 		cave_set_feat(y, x, FEAT_PERM_SOLID);
-		cave_sector_map[y][x]=0;
 	}
 
 
@@ -1948,8 +1919,6 @@ void generate_cave(void)
 
 				/* No monsters */
 				cave_m_idx[y][x] = 0;
-
-				cave_sector_map[y][x] = 0;
 			}
 		}
 

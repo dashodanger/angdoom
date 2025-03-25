@@ -7,8 +7,6 @@
 #include "defines.h"
 #include "externs.h"
 
-#include "wadstructs.h"
-
 /*
  * Global array for looping through the "keypad directions"
  */
@@ -35,7 +33,7 @@ int16_t ddy_ddd[9] =
 
 
 int16_t cave_o_idx[DUNGEON_HGT][DUNGEON_WID];
-uint8_t cave_info[DUNGEON_HGT][256];
+uint8_t cave_info[DUNGEON_HGT][DUNGEON_WID];
 uint8_t cave_feat[DUNGEON_HGT][DUNGEON_WID];
 int16_t cave_m_idx[DUNGEON_HGT][DUNGEON_WID];
 
@@ -44,20 +42,10 @@ int16_t rating;			/* Level's current rating */
 
 int playerpos_x, playerpos_y;
 
-void add_thing(Thing* t);
-
 void player_place(int y, int x) 
 {
-	Thing t;
 	printf("player at %i %i\n", y, x);
-	
-	t.x = x * 64 + 32;
-	t.y = y * 64 + 32;
-	t.angle = rand_int(360);
-	t.type = 1;
-	t.options = 0x7;
-
-	add_thing(&t);
+	cave_m_idx[y][x] = 19 + rand_int(4);
 }
 
 void place_trap(int y, int x) 
@@ -65,123 +53,42 @@ void place_trap(int y, int x)
 	printf("trap at %i %i\n", y, x);
 
 	cave_set_feat(y, x, FEAT_TRAP_HEAD);
-	cave_sector_map[y][x]=++sector_counter;
 }
 
-
-
-#define CHAINSAW        0x07d5
-#define SHOTGUN         0x07d1
-#define DBL_SHOTGUN     0x0052
-#define CHAINGUN        0x07d2
-#define ROCKET_LAUNCHER 0x07d3
-#define PLASMA_GUN      0x07d4
-#define BFG9000         0x07d6
-#define AMMO_CLIP       0x07d7
-#define SHOTGUN_SHELLS  0x07d8
-#define ONE_ROCKET      0x07da
-#define SMALL_CELLS     0x07ff
-#define AMMO_BOX        0x0800
-#define SHELLS_BOX      0x0801
-#define ROCKETS_BOX     0x07fe
-#define CELL_BOX        0x0011
-#define BACKPACK        0x0008
-
-#define STIMPACK        0x07db
-#define MEDIKIT         0x07dc
-#define HEALTH_POTION   0x07de
-#define SPIRIT_ARMOR    0x07df
-#define GREEN_ARMOR     0x07e2
-#define BLUE_ARMOR      0x07e3
-#define MEGASPHERE      0x0053
-#define SOULSPHERE      0x07dd
-#define INVULNERABILITY 0x07e6
-#define BERZERK_PACK    0x07e7
-#define INVISIBILITY    0x07e8
-#define RADIATION_SUIT  0x07e9
-#define COMPUTER_MAP    0x07ea
-#define LIGHT_AMP       0x07fd
-
+#define WOLF_CLIP 49
 
 void place_object(int y, int x, bool good, bool great) 
 {
-	Thing t;
+	if (cave_m_idx[y][x] || cave_o_idx[y][x]) return;
 
-	int16_t fun_items[13] = {CHAINSAW, SHOTGUN, DBL_SHOTGUN, CHAINGUN, ROCKET_LAUNCHER,
-							   AMMO_BOX, SHELLS_BOX, ROCKETS_BOX, BACKPACK, MEDIKIT,
-							   GREEN_ARMOR, BLUE_ARMOR, STIMPACK};
+	printf("object of type %i at (%i, %i)\n", WOLF_CLIP, x, y);
 
-	t.x = x * 64 + 32;
-	t.y = y * 64 + 32;
-	t.angle = rand_int(360);
-	t.type = fun_items[rand_int(13)];
-
-	printf("object of type %i at (%i, %i)\n", t.type, x, y);
-
-	t.options = 0x7;
-
-	add_thing(&t);
+	cave_o_idx[y][x] = WOLF_CLIP;
 }
+
+#define WOLF_CROSS 52
 
 void place_gold(int y, int x)
 {
+	if (cave_m_idx[y][x] || cave_o_idx[y][x]) return;
+
 	printf("money at %i %i\n", y, x);
+
+	cave_o_idx[y][x] = WOLF_CROSS;
 }
 
 /* monster thing types */
-#define FORMER_HUMAN   0x0bbc
-#define WOLFENSTEIN_SS 0x0054
-#define SERGEANT       0x0009
-#define HEAVY_WEP_DUDE 0x0041
-#define IMP            0x0bb9
-#define DEMON          0x0bba
-#define SPECTRE        0x003a
-#define LOST_SOUL      0x0bbe
-#define CACODEMON      0x0bbd
-#define HELL_KNIGHT    0x0045
-#define BARON_OF_HELL  0x0bbb
-#define ARACHNOTRON    0x0044
-#define PAIN_ELEMENTAL 0x0047
-#define REVENANT       0x0042
-#define MANCUBUS       0x0043
-#define ARCH_VILE      0x0040
-#define SPIDER_BOSS    0x0007
-#define CYBER_DEMON    0x0010
+#define WOLF_GUARD   108
 
 bool place_monster(int y, int x, bool slp, bool grp)
 {
-	Thing t;
-
-	int fun_monsters[11] = {FORMER_HUMAN,
-							SERGEANT,
-							IMP,
-							DEMON,
-							SPECTRE,
-							LOST_SOUL,
-							CACODEMON,
-							HELL_KNIGHT,
-							BARON_OF_HELL,
-							REVENANT,
-							PAIN_ELEMENTAL};
+	if (cave_m_idx[y][x] || cave_o_idx[y][x]) return FALSE;
 
 	printf("monster at %i %i\n", y, x);
 
-	t.x = x * 64 + 32;
-	t.y = y * 64 + 32;
-	t.angle = rand_int(360)-1;
-	t.type = fun_monsters[rand_int(11)];
-	t.options = 0x7;
-
-	cave_m_idx[y][x]=t.type + 1;
-
-	add_thing(&t);
+	cave_m_idx[y][x]= WOLF_GUARD + rand_int(4);
 
 	return TRUE;
-}
-
-void place_monster_aux(int y, int x, int r_idx, bool slp, bool grp) 
-{
-	printf("monster type %i at %i %i\n", r_idx, y, x);
 }
 
 /*

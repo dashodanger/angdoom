@@ -4,10 +4,7 @@
 
 #include "h-type.h"
 
-
-
 /**** Available constants ****/
-
 
 /*
  * The "degree" of the "complex" Random Number Generator.
@@ -15,11 +12,7 @@
  */
 #define RAND_DEG 63
 
-
-
-
 /**** Available macros ****/
-
 
 /*
  * Generates a random long integer X where O<=X<M.
